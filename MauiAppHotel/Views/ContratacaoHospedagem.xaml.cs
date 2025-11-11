@@ -1,3 +1,5 @@
+using MauiAppHotel.Models;
+
 namespace MauiAppHotel.Views;
 
 public partial class ContratacaoHospedagem : ContentPage
@@ -27,17 +29,30 @@ public partial class ContratacaoHospedagem : ContentPage
 		DisplayAlert("Desenvolvido por:", "Lenildo Santana ,2025.", "Fechar");
     }
 
-    private void BtnAvançar_Clicked(object sender, EventArgs e)
+    private async void BtnAvançar_Clicked(object sender, EventArgs e)
     {
 		try
 		{
-			Navigation.PushAsync(new HospedagemContratada());
+			Hospedagem h = new Hospedagem
+			{
+				QuartoSelecionado = (Quarto)pck_quarto.SelectedItem,
+				QntAdultos = Convert.ToInt32(stp_adultos.Value),
+				QntCrianças = Convert.ToInt32(stp_criancas.Value),
+				DataCheckin = dtcpk_checkin.Date,
+				DataCheckout = dtcpk_checkout.Date
+			};
+
+
+			await Navigation.PushAsync(new HospedagemContratada()
+			{
+				BindingContext = h
+			});
 
 
 		}
 		catch (Exception ex)
 		{
-			DisplayAlert("Ops", ex.Message, "ok!");
+			await DisplayAlert("Ops", ex.Message, "ok!");
 		}
     }
 
